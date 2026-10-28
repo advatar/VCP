@@ -11,6 +11,7 @@ The model keeps **identity**, **authority**, **provenance**, **claims** and **ev
 ## Read the proposal
 
 - **[W3C discussion proposal](W3C.md)** — meeting brief, suggested opening, full contribution model, privacy and security requirements, interoperability questions and proposed next steps.
+- **[Interoperability survey](INTEROPERABILITY.md)** — a detailed study of existing standards, proposed mappings, semantic limits, candidate gaps and interoperability experiments.
 - **[Semantic Event companion](SEMANTIC_EVENT.md)** — a candidate vocabulary for describing contribution activities across publishing, research, software and other domains.
 - **[Proposal status](STATUS.md)** — current scope and publication checks.
 
