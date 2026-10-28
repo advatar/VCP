@@ -663,6 +663,8 @@ This representation is illustrative. JSON itself is not the information model.
 
 ## 19. Interoperability with Existing Work
 
+The [VCP Interoperability Survey](INTEROPERABILITY.md) develops this mapping exercise in detail, with reviewed specification editions, proposed semantic crosswalks, evidence and trust boundaries, a lifecycle example and interoperability experiments. It identifies substantial existing coverage and distinguishes reuse, profile work and candidate gaps.
+
 The starting point is a mapping exercise with existing communities. New terminology or formats should be justified by an identified gap and independently reviewed use cases.
 
 The COA CG identifies C2PA, CAWG, Originator Profile and Verifiable Credentials among the communities and technologies to bring together. The following are **proposed mapping questions**, not claims of completed integration or endorsements by those communities.

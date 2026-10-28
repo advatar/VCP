@@ -17,3 +17,11 @@ Validation: all local Markdown links resolve; code fences are balanced; numbered
 - [x] Verify local links, allowed public references, Markdown structure and illustrative JSON.
 
 Audit result: all four public documents use neutral terminology. References are limited to files in this repository, public standards and meeting material, this repository’s public issue tracker, and illustrative example identifiers. Four JSON examples parse; no example advertises an unavailable schema. Section numbering, code fences, local links and the retained security requirements pass validation.
+
+## Interoperability survey (#5) — 28 October 2026
+
+- [x] Survey primary specifications for content authenticity, originator identity, credentials, provenance, web association, software supply chains and creative-domain metadata.
+- [x] Write a detailed standalone survey with proposed mappings, explicit semantic limits, candidate gaps and interoperability experiments.
+- [x] Link the survey from the README and Section 19; verify sources, links and public-repository scope.
+
+Validation: reviewed primary specification text and document status; checked all local links and anchors, illustrative JSON, code fences and public reference domains. Public source URLs returned HTTP 200; the two source-repository documents are pinned to reviewed commits. GitHub Markdown rendering produced 12 tables with consistent columns and a correctly rendered HTTP example. Documentation only; proposed interoperability experiments are future work.
