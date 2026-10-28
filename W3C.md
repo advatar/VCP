@@ -257,7 +257,7 @@ Identity mechanisms may include:
 - organizational credentials;
 - professional credentials;
 - national electronic identity;
-- EUDI Wallet credentials;
+- selectively disclosed identity credentials;
 - other authoritative identity systems.
 
 Identity assurance SHALL be represented independently from the provenance Claim.
@@ -728,7 +728,7 @@ Each assertion MAY have independent Evidence.
 
 No single assertion such as "Bob created the report" is required to collapse these relationships.
 
-The workflow MAY additionally represent these contribution semantics using the SemanticEvent profile, for example `eventType=Create` with `activity.type=https://example.org/vcp/activity/publishing/author/draft`, while content-addressed artifact states identify the actual documents, figures and project state. A Git binding is one possible domain binding, not a requirement of the model.
+The workflow MAY additionally represent these contribution semantics using the SemanticEvent profile, for example `eventType=Create` with `activity.type=https://example.org/vcp/activity/publishing/author/draft`, while content-addressed artifact states identify the actual documents, figures and project state. The model leaves storage and version management to independently defined bindings.
 
 ---
 
@@ -1093,7 +1093,11 @@ Every Relationship included in a bounded provenance bundle SHALL reference at le
 
 ## 30. Specification Work and Current Status
 
-This public repository contains a discussion proposal and a [Semantic Event companion](SEMANTIC_EVENT.md). It does not yet publish an agreed interchange schema, canonicalization specification, trust registry or conformance suite. The JSON snippets illustrate the proposed model; they are not a finalized wire format.
+This public repository contains the complete discussion proposal and its [Semantic Event companion](SEMANTIC_EVENT.md). All proposal definitions and examples needed to read these documents are included here; external standards links provide public background and candidate interoperability targets.
+
+This repository does not yet publish an agreed interchange schema, canonicalization specification, trust registry or conformance suite. The JSON snippets illustrate the proposed model; they are not a finalized wire format.
+
+No schema file in another repository is required or incorporated by reference. Future bindings would need to publish their own complete definitions and supporting material.
 
 Before claiming interoperable conformance, a binding would need to define:
 

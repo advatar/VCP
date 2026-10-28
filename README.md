@@ -6,6 +6,8 @@ VCP is a proposal for describing and independently checking contributions by hum
 
 The model keeps **identity**, **authority**, **provenance**, **claims** and **evidence** distinct. A signature can protect a record without proving that the described event occurred. A verified identity does not grant authority. A publication can preserve the roles of its author, editor, publisher, AI model and delegated agent instead of collapsing them into one creator.
 
+**Canonical public proposal:** [W3C.md in this repository](W3C.md).
+
 ## Read the proposal
 
 - **[W3C discussion proposal](W3C.md)** — meeting brief, suggested opening, full contribution model, privacy and security requirements, interoperability questions and proposed next steps.
@@ -24,7 +26,9 @@ The starting example is an article with human-written text, an AI-generated illu
 
 This is an author's discussion proposal, not a W3C specification or an adopted Community Group report. Normative keywords in the drafts express proposed VCP requirements for review.
 
-This repository contains the public proposal and its semantic companion. It is independent of any commercial implementation, identity provider, hosting platform or distributed ledger. It does not yet publish an agreed wire format, normative schema or conformance suite, and it makes no claim of completed interoperability.
+This repository contains the complete public proposal and its semantic companion. All definitions and illustrative examples needed to read them are included here. External references point to public standards, meeting context or this repository; no private repository, platform service or schema download is needed.
+
+The proposal is independent of any commercial implementation, identity provider, hosting platform or distributed ledger. It does not yet publish an agreed wire format, normative schema or conformance suite, and it makes no claim of completed interoperability.
 
 ## Feedback
 

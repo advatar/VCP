@@ -56,26 +56,26 @@ Attestation
 
 A SemanticEvent SHALL NOT be interpreted as true merely because it is syntactically valid.
 
-## 3. State transitions and optional Git binding
+## 3. State transitions
 
-A SemanticEvent SHOULD identify a before-state and after-state where the workflow exposes them, using content digests or another binding-defined state identifier. A Git binding is one possible representation: Git can identify the exact project state while the event describes the contribution meaning. The following Git example is illustrative and does not require other domains to use Git.
+A SemanticEvent SHOULD identify a before-state and after-state where the workflow exposes them. A state reference MAY use an Artifact digest, an immutable version identifier or another binding-defined identifier. Its meaning SHALL be explicit; a mutable location alone does not identify the exact content state.
 
 ```text
-Git commit C100
-    artifact state before
+Artifact state A
+    content before
          |
          | SemanticEvent
          | actor = Alice
          | eventType = Modify
          | activity = LineEdit
          v
-Git commit C101
-    artifact state after
+Artifact state B
+    content after
 ```
 
-The SemanticEvent states what the transition is claimed to mean. Git identifies the exact bytes or content-addressed object state before and after.
+The SemanticEvent describes what the transition is claimed to mean. Integrity Evidence binds the description to the identified content states. This separation applies to documents, datasets, recordings, designs and software without requiring any particular storage service, version-control system or ledger.
 
-A SemanticEvent SHALL NOT replace the Git binding, Artifact digest, Claim, Evidence, or Attestation.
+A SemanticEvent SHALL NOT replace an Artifact digest, Claim, Evidence or Attestation.
 
 ## 4. Core event vocabulary
 
@@ -254,15 +254,14 @@ Examples include pages in a manuscript, a source-code symbol, a region of a desi
 `before` and `after` state references MAY identify:
 
 ```text
-git-commit
-git-tree
 artifact-digest
+versioned-state
 external-state
 ```
 
-A Git-bound profile SHOULD use Git commit or tree identifiers where possible.
+A binding SHALL define how each reference identifies its exact state and how that binding is verified. A consumer SHALL distinguish an identifier from proof of the referenced state's integrity or availability.
 
-The after-state MAY be the commit containing the SemanticEvent record when the applicable Git profile defines that binding. A profile SHALL specify how circular self-reference is avoided.
+A profile SHALL specify how circular self-reference is avoided if an event record is stored with the state it describes. The event model does not prescribe where either the event or the content is stored.
 
 ## 9. Event relationships
 
@@ -317,7 +316,7 @@ project state moved from digest A to digest B.
 
 It SHALL NOT infer a human identity or creative authorship merely from those observations unless independent Identity Evidence supports that proposition.
 
-Similarly, a Git diff can establish the exact project transition but does not by itself establish who conceived or authored the change.
+Similarly, comparing two verified content states can establish what changed without establishing who conceived or authored the change.
 
 ## 12. Subjective and legal conclusions
 
@@ -369,7 +368,6 @@ These examples cover different domains so reviewers can assess whether the abstr
 
 ```json
 {
-  "schema": "https://example.org/vcp/semantic-event/v0.1",
   "id": "event-measurement-run-7",
   "entityType": "SemanticEvent",
   "eventType": "Measure",
@@ -382,13 +380,13 @@ These examples cover different domains so reviewers can assess whether the abstr
   },
   "actors": [
     {
-      "actorRef": "urn:person:alice",
+      "actorRef": "https://example.org/actor/alice",
       "actorType": "human",
       "role": "https://example.org/vcp/role/research/experimenter",
       "participation": "primary"
     },
     {
-      "actorRef": "urn:person:carol",
+      "actorRef": "https://example.org/actor/carol",
       "actorType": "human",
       "role": "https://example.org/vcp/role/research/instrument-operator",
       "participation": "operator"
@@ -396,33 +394,43 @@ These examples cover different domains so reviewers can assess whether the abstr
   ],
   "artifacts": [
     {
-      "artifactRef": "git:path:Data/Runs/Run-07.csv",
+      "artifactRef": "https://example.org/artifact/measurement-run-7",
       "relationship": "output",
-      "path": "Data/Runs/Run-07.csv",
       "mediaType": "text/csv",
-      "selector": {"kind": "object", "value": "Sample B"}
+      "selector": {
+        "kind": "object",
+        "value": "Sample B"
+      }
     },
     {
-      "artifactRef": "git:path:Experiment.json",
-      "relationship": "modified",
-      "path": "Experiment.json"
+      "artifactRef": "https://example.org/artifact/experiment-description",
+      "relationship": "modified"
     }
   ],
-  "before": {"type": "git-commit", "ref": "8f10..."},
-  "after": {"type": "git-commit", "ref": "91ab..."},
-  "claimRefs": ["claim-measurement-run-7"],
-  "evidenceRefs": ["instrument-observation-884"],
+  "before": {
+    "type": "versioned-state",
+    "ref": "https://example.org/state/experiment/v1"
+  },
+  "after": {
+    "type": "versioned-state",
+    "ref": "https://example.org/state/experiment/v2"
+  },
+  "claimRefs": [
+    "claim-measurement-run-7"
+  ],
+  "evidenceRefs": [
+    "instrument-observation-884"
+  ],
   "createdAt": "2026-09-12T15:18:00Z"
 }
 ```
 
-This describes the contribution semantics while the referenced Git state contains or content-addresses the actual dataset and experiment project state.
+This describes the contribution semantics while the state references identify the dataset and experiment state. A selected binding would define the integrity evidence for those states.
 
 ## 15. Publishing profile example
 
 ```json
 {
-  "schema": "https://example.org/vcp/semantic-event/v0.1",
   "id": "event-chapter4-line-edit",
   "entityType": "SemanticEvent",
   "eventType": "Modify",
@@ -433,20 +441,35 @@ This describes the contribution semantics while the referenced Git state contain
     "broaderActivity": "https://example.org/vcp/activity/publishing/edit",
     "profile": "https://example.org/vcp/profile/publishing/v0.1"
   },
-  "actors": [{
-    "actorRef": "urn:person:editor-1",
-    "actorType": "human",
-    "role": "https://example.org/vcp/role/publishing/line-editor",
-    "participation": "primary"
-  }],
-  "artifacts": [{
-    "artifactRef": "git:path:manuscript/book.docx",
-    "relationship": "modified",
-    "path": "manuscript/book.docx",
-    "selector": {"kind": "page-range", "value": {"start": 87, "end": 104}}
-  }],
-  "before": {"type": "git-commit", "ref": "124a..."},
-  "after": {"type": "git-commit", "ref": "57bc..."},
+  "actors": [
+    {
+      "actorRef": "https://example.org/actor/editor-1",
+      "actorType": "human",
+      "role": "https://example.org/vcp/role/publishing/line-editor",
+      "participation": "primary"
+    }
+  ],
+  "artifacts": [
+    {
+      "artifactRef": "https://example.org/artifact/manuscript",
+      "relationship": "modified",
+      "selector": {
+        "kind": "page-range",
+        "value": {
+          "start": 87,
+          "end": 104
+        }
+      }
+    }
+  ],
+  "before": {
+    "type": "versioned-state",
+    "ref": "https://example.org/state/manuscript/v1"
+  },
+  "after": {
+    "type": "versioned-state",
+    "ref": "https://example.org/state/manuscript/v2"
+  },
   "createdAt": "2026-09-12T14:00:00Z"
 }
 ```
@@ -455,7 +478,6 @@ This describes the contribution semantics while the referenced Git state contain
 
 ```json
 {
-  "schema": "https://example.org/vcp/semantic-event/v0.1",
   "id": "event-auth-implementation",
   "entityType": "SemanticEvent",
   "eventType": "Create",
@@ -486,16 +508,30 @@ This describes the contribution semantics while the referenced Git state contain
       "participation": "assistant"
     }
   ],
-  "artifacts": [{
-    "artifactRef": "git:path:Sources/Auth/",
-    "relationship": "modified",
-    "path": "Sources/Auth/",
-    "selector": {"kind": "directory", "value": "Sources/Auth/"}
-  }],
-  "before": {"type": "git-commit", "ref": "abcdef..."},
-  "after": {"type": "git-commit", "ref": "123456..."},
-  "authorityRefs": ["authority-alice-agent-17"],
-  "claimRefs": ["claim-agent-auth-implementation"],
+  "artifacts": [
+    {
+      "artifactRef": "https://example.org/artifact/authentication-component",
+      "relationship": "modified",
+      "selector": {
+        "kind": "directory",
+        "value": "Sources/Auth/"
+      }
+    }
+  ],
+  "before": {
+    "type": "versioned-state",
+    "ref": "https://example.org/state/software-component/v1"
+  },
+  "after": {
+    "type": "versioned-state",
+    "ref": "https://example.org/state/software-component/v2"
+  },
+  "authorityRefs": [
+    "authority-alice-agent-17"
+  ],
+  "claimRefs": [
+    "claim-agent-auth-implementation"
+  ],
   "createdAt": "2026-09-12T15:00:00Z"
 }
 ```
@@ -521,17 +557,19 @@ A conforming Consumer SHALL:
 - report unsupported domain semantics rather than silently remapping them;
 - avoid treating a SemanticEvent as proof that an event occurred.
 
-A Git-bound Semantic Event Verifier SHALL additionally:
+A Semantic Event Verifier evaluating state transitions SHALL additionally:
 
-- validate referenced before/after Git states where available;
-- validate that referenced artifact paths or objects exist at the applicable state;
-- preserve the distinction between the exact Git transition and the semantic Claim about what that transition means;
+- evaluate the binding and integrity Evidence for referenced before/after states where available;
+- validate that referenced Artifacts and selected subparts belong to the applicable state;
+- preserve the distinction between a verified content transition and the semantic Claim about what that transition means;
 - report unsupported selectors or domain semantics separately from structural failure.
 
 ## 18. Proposed JSON Binding
 
-The JSON examples illustrate a possible binding of the Semantic Event model. This repository does not yet define a normative JSON Schema or a conformance suite. The `schema` URLs in the examples are placeholders identifying the proposed shape; they are not retrieval endpoints.
+The JSON examples illustrate a possible representation of the Semantic Event model. They are event fragments, not complete provenance bundles or independently verifiable evidence packages. Referenced Actors, Artifacts, Claims and Evidence would need their own descriptions in a complete bundle.
+
+This repository does not yet define a normative JSON Schema or conformance suite. The examples therefore omit schema-location fields rather than referring to unavailable files or retrieval endpoints. Identifiers under `https://example.org/` are illustrative values; understanding the examples requires no network access.
 
 A future binding would need to define field types, identifier and reference rules, state and selector validation, extension handling, canonicalization and versioning, together with positive and adversarial fixtures. It must preserve the assertion boundary and the distinction between semantic description, Claim, Evidence and Attestation.
 
-Domain-specific bindings, including a possible Git binding, should be reviewed separately from the portable semantic model.
+Any domain or storage binding should be reviewed separately from the portable semantic model. No implementation or infrastructure is required by this companion profile.
